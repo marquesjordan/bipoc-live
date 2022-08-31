@@ -1,24 +1,62 @@
-import logo from './logo.svg';
 import './App.css';
+import { Routes, Route, BrowserRouter as Router } from 'react-router-dom';
+import Home from './pages/Home';
+import Navbar from './components/Navbar';
+import Register from './pages/Register';
+import Login from './pages/Login';
+import Profile from './pages/Profile';
+import AuthProvider from './context/auth';
+import PrivateRoute from './components/PrivateRoute';
+import Messages from './pages/Messages';
+import Company from './pages/Company';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthProvider>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route
+            exact
+            path="/"
+            element={
+              <PrivateRoute>
+                <Home />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            exact
+            path="/messages"
+            element={
+              <PrivateRoute>
+                <Messages />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            exact
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            exact
+            path="/company"
+            element={
+              <PrivateRoute>
+                <Company />
+              </PrivateRoute>
+            }
+          />
+          <Route exact path="/register" element={<Register />} />
+          <Route exact path="/login" element={<Login />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 
