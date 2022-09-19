@@ -1,28 +1,32 @@
-import React, { useState, useEffect } from 'react';
 import List from '@mui/material/List';
+import React, { useEffect, useState } from 'react';
 
 import Container from '@mui/material/Container';
 import styled from 'styled-components';
 // @mui icons-material components
-import TwitterIcon from '@mui/icons-material/Twitter';
+import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import LinkedinIcon from '@mui/icons-material/LinkedIn';
-import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
 import YoutubeIcon from '@mui/icons-material/YouTube';
-import Camera from '../components/svg/Camera';
-import Img from '../logo.png';
 import { useNavigate } from 'react-router-dom';
+import Camera from '../components/svg/Camera';
 import Delete from '../components/svg/Delete';
+import Img from '../logo.png';
 
-import { storage, db, auth } from '../firebase';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
+
+import { doc, updateDoc } from 'firebase/firestore';
 import {
-  ref,
-  getDownloadURL,
-  uploadBytes,
   deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
 } from 'firebase/storage';
-import { getDoc, doc, updateDoc } from 'firebase/firestore';
+import { db, storage } from '../firebase';
 import { useMediaQuery } from '../hooks/media';
+import JobForm from './JobForm';
+import JobList from './JobList';
 
 function CompanyList({ companies }) {
   const navigate = useNavigate();
@@ -30,10 +34,32 @@ function CompanyList({ companies }) {
 
   const [img, setImg] = useState('');
   const [company, setCompany] = useState();
+  const [jobs, setJobs] = useState([]);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     if (companies.length > 0) {
       setCompany(companies[0]);
+
+      const jobsCol = collection(db, 'jobs');
+
+      const q = query(
+        jobsCol,
+        where('postByCompanyRef', '==', companies[0].id),
+      );
+      console.log('q', q);
+      const unsub = onSnapshot(q, (querySnapshot) => {
+        let _jobs = [];
+        querySnapshot.forEach((doc) => {
+          let data = {};
+          data = doc.data();
+          data.id = doc.id;
+          _jobs.push(data);
+        });
+        setJobs(_jobs);
+      });
+
+      return () => unsub();
     }
 
     if (img) {
@@ -82,7 +108,8 @@ function CompanyList({ companies }) {
 
   return (
     <List sx={{ width: '100%' }}>
-      {companies.map(({ companyName, heading, companyBio, logo }) => {
+      {companies.map((company) => {
+        const { companyName, heading, companyBio, logo } = company;
         return (
           <Container>
             <ShadowBox>
@@ -124,7 +151,7 @@ function CompanyList({ companies }) {
                     </Data>
                     <Data>
                       <DataTitle>Jobs:</DataTitle>
-                      <DataValue>##</DataValue>
+                      <DataValue>{jobs.length}</DataValue>
                     </Data>
                     <Data>
                       <DataTitle>Applicants:</DataTitle>
@@ -141,6 +168,29 @@ function CompanyList({ companies }) {
                 </HeaderData>
               </Header>
             </ShadowBox>
+            <BottomContainer>
+              <BottomMenuContainer>
+                <div>
+                  <ListItem>Jobs</ListItem>
+                  <ListItem>Posts</ListItem>
+                </div>
+              </BottomMenuContainer>
+
+              <BottomBodyContainer>
+                {!showForm ? (
+                  <JobList
+                    onShowForm={() => setShowForm(true)}
+                    company={company}
+                    jobs={jobs}
+                  />
+                ) : (
+                  <JobForm
+                    onCloseForm={() => setShowForm(false)}
+                    company={company}
+                  />
+                )}
+              </BottomBodyContainer>
+            </BottomContainer>
           </Container>
         );
       })}
@@ -150,6 +200,17 @@ function CompanyList({ companies }) {
 
 export default CompanyList;
 
+const ListItem = styled.div`
+  color: var(--color-1);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 8px;
+
+  &:hover {
+    background: #f0f0f0;
+  }
+`;
+
 const ShadowBox = styled.div`
   margin: 10px auto;
   box-shadow: 1px 2px 10px var(--color-4);
@@ -158,12 +219,37 @@ const ShadowBox = styled.div`
   background-color: white;
 `;
 
+const BottomContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const BottomMenuContainer = styled.div`
+  box-shadow: 1px 2px 10px var(--color-4);
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: white;
+  flex-basis: 275px;
+  margin-right: 10px;
+  height: max-content;
+`;
+
+const BottomBodyContainer = styled.div`
+  box-shadow: 1px 2px 10px var(--color-4);
+  padding: 10px 20px;
+  border-radius: 5px;
+  background-color: white;
+  flex: 1;
+`;
+
 const CompanyTitle = styled.h2`
   margin: 0.5rem 0;
 `;
 
 const CompanyHeading = styled.div`
   font-size: 12px;
+  border-bottom: 1px solid;
+  font-weight: 600;
 `;
 
 const CompanyBio = styled.p`
