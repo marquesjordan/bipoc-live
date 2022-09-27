@@ -10,7 +10,11 @@ const ReadMore = ({ children }) => {
   };
   return (
     <p className="text">
-      {isReadMore ? text.slice(0, 150) : text}
+      {isReadMore ? (
+        text.slice(0, 150)
+      ) : (
+        <span style={{ whiteSpace: 'pre-wrap' }}>{text}</span>
+      )}
       <MoreOrLess onClick={toggleReadMore} className="read-or-hide">
         {isReadMore ? '...read more' : ' show less'}
       </MoreOrLess>
