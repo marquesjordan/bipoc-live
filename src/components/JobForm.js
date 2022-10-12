@@ -1,17 +1,17 @@
 import { addDoc, collection, Timestamp } from 'firebase/firestore';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth, db, storage } from '../firebase';
-import { useMediaQuery } from '../hooks/media';
 import styled from 'styled-components';
-import Moment from 'react-moment';
+import { auth, db } from '../firebase';
+import { useMediaQuery } from '../hooks/media';
 
 function JobForm({ company, onCloseForm }) {
   const navigate = useNavigate();
   const [img, setImg] = useState('');
   const [requiredItem, setRequiredItem] = useState('');
+  const [dutyItem, setDutyItem] = useState('');
   const [qualificationList, setQualificationList] = useState([]);
+  const [dutiesList, setDutiesList] = useState([]);
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   const user = auth.currentUser.uid;
@@ -58,6 +58,17 @@ function JobForm({ company, onCloseForm }) {
     setRequiredItem('');
   };
 
+  const handleDutyChange = (e) => {
+    setDutyItem(e.target.value);
+  };
+
+  const handleDutyAdd = () => {
+    const temp = dutiesList;
+    temp.push(requiredItem);
+    setDutiesList(temp);
+    setDutyItem('');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('kdskdkks');
@@ -88,6 +99,7 @@ function JobForm({ company, onCloseForm }) {
         jobSummary,
         salary,
         qualifications: qualificationList,
+        duties: dutiesList,
         active: false,
         createdBy: user,
         createdAt: Timestamp.fromDate(new Date()),
@@ -106,8 +118,9 @@ function JobForm({ company, onCloseForm }) {
         error: null,
         loading: false,
       });
-      setQualificationList([]);
 
+      setQualificationList([]);
+      setDutiesList([]);
       onCloseForm();
       // navigate('/company');
     } catch (err) {
@@ -124,62 +137,50 @@ function JobForm({ company, onCloseForm }) {
             Close Form
           </CloseBtn>
         </CloseBtnContainer>
-        <h3>New Job Form</h3>
+        <h3>Create Job Post</h3>
         <form className="form" onSubmit={handleSubmit}>
-          <div className="input_container">
-            <label htmlFor="companyName">Job Title</label>
-            <input
-              type="text"
-              name="jobTitle"
-              value={jobTitle}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="input_container">
-            <label htmlFor="companyName">Company Name</label>
-            <input
-              type="text"
-              name="companyName"
-              value={companyName}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="input_container">
-            <label htmlFor="companyDescription">Company Summary</label>
-            <textarea
-              type="text"
-              name="companyDescription"
-              value={companyDescription}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="input_container">
-            <label htmlFor="companyUrl">Company Website</label>
-            <input
-              type="text"
-              name="companyUrl"
-              value={companyUrl}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="input_container">
-            <label htmlFor="location">Job Location</label>
-            <input
-              type="text"
-              name="location"
-              value={location}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="input_container">
-            <label htmlFor="employmentType">Employment Type</label>
-            <input
-              type="text"
-              name="employmentType"
-              value={employmentType}
-              onChange={handleChange}
-            />
-          </div>
+          <FormRow>
+            <div className="input_container">
+              <label htmlFor="companyName">Job Title</label>
+              <input
+                type="text"
+                name="jobTitle"
+                value={jobTitle}
+                onChange={handleChange}
+              />
+            </div>
+            <div style={{ marginLeft: 10 }} />
+            <div className="input_container">
+              <label htmlFor="location">Job Location</label>
+              <input
+                type="text"
+                name="location"
+                value={location}
+                onChange={handleChange}
+              />
+            </div>
+          </FormRow>
+          <FormRow>
+            <div className="input_container">
+              <label htmlFor="employmentType">Employment Type</label>
+              <input
+                type="text"
+                name="employmentType"
+                value={employmentType}
+                onChange={handleChange}
+              />
+            </div>
+            <div style={{ marginLeft: 10 }} />
+            <div className="input_container">
+              <label htmlFor="salary">Salary Range</label>
+              <input
+                type="text"
+                name="salary"
+                value={salary}
+                onChange={handleChange}
+              />
+            </div>
+          </FormRow>
           <div className="input_container">
             <label htmlFor="jobSummary">Job Summary</label>
             <textarea
@@ -189,13 +190,78 @@ function JobForm({ company, onCloseForm }) {
               onChange={handleChange}
             />
           </div>
+          <hr style={{ marginTop: 20 }} />
+          <FormRow>
+            <div className="input_container">
+              <label htmlFor="companyName">Company Name</label>
+              <input
+                type="text"
+                name="companyName"
+                value={companyName}
+                onChange={handleChange}
+              />
+            </div>
+            <div style={{ marginLeft: 10 }} />
+            <div className="input_container">
+              <label htmlFor="companyUrl">Company Website</label>
+              <input
+                type="text"
+                name="companyUrl"
+                value={companyUrl}
+                onChange={handleChange}
+              />
+            </div>
+          </FormRow>
           <div className="input_container">
-            <label htmlFor="companyName">Qualifications (optional)</label>
+            <label htmlFor="companyDescription">Company Summary</label>
+            <textarea
+              type="text"
+              name="companyDescription"
+              value={companyDescription}
+              onChange={handleChange}
+            />
+          </div>
+          <hr style={{ marginTop: 20 }} />
+
+          <div className="input_container">
+            <label htmlFor="duty">Duities (optional)</label>
             <div
               style={{
                 display: 'flex',
               }}>
               <input
+                id="duty"
+                type="text"
+                name="required"
+                value={dutyItem}
+                onChange={handleDutyChange}
+              />
+              <div
+                onClick={() => handleDutyAdd()}
+                style={{
+                  width: 65,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  alignContent: 'center',
+                  color: 'blue',
+                  fontWeight: 'bold',
+                  paddingLeft: 10,
+                  fontSize: 30,
+                  cursor: 'pointer',
+                }}>
+                +
+              </div>
+            </div>
+          </div>
+          <div className="input_container">
+            <label htmlFor="qualifiication">Qualifications (optional)</label>
+            <div
+              style={{
+                display: 'flex',
+              }}>
+              <input
+                id="qualification"
                 type="text"
                 name="required"
                 value={requiredItem}
@@ -226,15 +292,7 @@ function JobForm({ company, onCloseForm }) {
               </ul>
             </div>
           </div>
-          <div className="input_container">
-            <label htmlFor="salary">Salary Range</label>
-            <input
-              type="text"
-              name="salary"
-              value={salary}
-              onChange={handleChange}
-            />
-          </div>
+
           <div style={{ marginTop: 20 }}>
             <label for="profile_pic">Choose file to upload</label>
             <input
@@ -269,4 +327,8 @@ const CloseBtnContainer = styled.div`
 const CloseBtn = styled.a`
   color: blue;
   cursor: pointer;
+`;
+
+const FormRow = styled.div`
+  display: flex;
 `;

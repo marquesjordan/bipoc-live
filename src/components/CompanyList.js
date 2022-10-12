@@ -26,7 +26,14 @@ import {
 import { db, storage } from '../firebase';
 import { useMediaQuery } from '../hooks/media';
 import JobForm from './JobForm';
-import JobList from './JobList';
+import CompanyJobList from './CompanyJobList';
+import CompanyJobItem from './CompanyJobItem';
+import JobDetail from './JobDetail';
+
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 
 function CompanyList({ companies }) {
   const navigate = useNavigate();
@@ -35,7 +42,29 @@ function CompanyList({ companies }) {
   const [img, setImg] = useState('');
   const [company, setCompany] = useState();
   const [jobs, setJobs] = useState([]);
+  const [selectedJob, setSelectedJob] = useState({});
   const [showForm, setShowForm] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = (jobItem) => {
+    setSelectedJob(jobItem);
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setSelectedJob({});
+    setOpen(false);
+  };
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 
   useEffect(() => {
     if (companies.length > 0) {
@@ -107,94 +136,106 @@ function CompanyList({ companies }) {
   };
 
   return (
-    <List sx={{ width: '100%' }}>
-      {companies.map((company) => {
-        const { companyName, heading, companyBio, logo } = company;
-        return (
-          <Container>
-            <ShadowBox>
-              <Header isMobile={isMobile}>
-                <LogoContainer>
-                  <LogoImg src={logo || Img} alt="logo" isMobile={isMobile} />
-                  <div className="overlay">
-                    <div>
-                      <label htmlFor="photo">
-                        <Camera />
-                      </label>
-                      {logo ? <Delete deleteImage={deleteImage} /> : null}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        style={{ display: 'none' }}
-                        id="photo"
-                        onChange={(e) => setImg(e.target.files[0])}
-                      />
+    <>
+      <List sx={{ width: '100%' }}>
+        {companies.map((company) => {
+          const { companyName, heading, companyBio, logo } = company;
+          return (
+            <Container>
+              <ShadowBox>
+                <Header isMobile={isMobile}>
+                  <LogoContainer>
+                    <LogoImg src={logo || Img} alt="logo" isMobile={isMobile} />
+                    <div className="overlay">
+                      <div>
+                        <label htmlFor="photo">
+                          <Camera />
+                        </label>
+                        {logo ? <Delete deleteImage={deleteImage} /> : null}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          style={{ display: 'none' }}
+                          id="photo"
+                          onChange={(e) => setImg(e.target.files[0])}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </LogoContainer>
-                <HeaderInfo>
-                  <CompanyTitle>{companyName}</CompanyTitle>
-                  <CompanyHeading>{heading}</CompanyHeading>
-                  <div>
-                    <CompanyBio>{companyBio}</CompanyBio>
-                  </div>
-                </HeaderInfo>
-                <HeaderData isMobile={isMobile}>
-                  <div>
-                    <Data>
-                      <DataTitle>Company Views:</DataTitle>
-                      <DataValue>#,###</DataValue>
-                    </Data>
-                    <Data>
-                      <DataTitle>Followers:</DataTitle>
-                      <DataValue>###</DataValue>
-                    </Data>
-                    <Data>
-                      <DataTitle>Jobs:</DataTitle>
-                      <DataValue>{jobs.length}</DataValue>
-                    </Data>
-                    <Data>
-                      <DataTitle>Applicants:</DataTitle>
-                      <DataValue>##</DataValue>
-                    </Data>
-                  </div>
-                  <Social>
-                    <TwitterIcon />
-                    <InstagramIcon />
-                    <LinkedinIcon />
-                    <FacebookIcon />
-                    <YoutubeIcon />
-                  </Social>
-                </HeaderData>
-              </Header>
-            </ShadowBox>
-            <BottomContainer>
-              <BottomMenuContainer>
+                  </LogoContainer>
+                  <HeaderInfo>
+                    <CompanyTitle>{companyName}</CompanyTitle>
+                    <CompanyHeading>{heading}</CompanyHeading>
+                    <div>
+                      <CompanyBio>{companyBio}</CompanyBio>
+                    </div>
+                  </HeaderInfo>
+                  <HeaderData isMobile={isMobile}>
+                    <div>
+                      <Data>
+                        <DataTitle>Company Views:</DataTitle>
+                        <DataValue>#,###</DataValue>
+                      </Data>
+                      <Data>
+                        <DataTitle>Followers:</DataTitle>
+                        <DataValue>###</DataValue>
+                      </Data>
+                      <Data>
+                        <DataTitle>Jobs:</DataTitle>
+                        <DataValue>{jobs.length}</DataValue>
+                      </Data>
+                      <Data>
+                        <DataTitle>Applicants:</DataTitle>
+                        <DataValue>##</DataValue>
+                      </Data>
+                    </div>
+                    <Social>
+                      <TwitterIcon />
+                      <InstagramIcon />
+                      <LinkedinIcon />
+                      <FacebookIcon />
+                      <YoutubeIcon />
+                    </Social>
+                  </HeaderData>
+                </Header>
+              </ShadowBox>
+              <BottomContainer>
+                {/* <BottomMenuContainer>
                 <div>
                   <ListItem>Jobs</ListItem>
                   <ListItem>Posts</ListItem>
                 </div>
-              </BottomMenuContainer>
+              </BottomMenuContainer> */}
 
-              <BottomBodyContainer>
-                {!showForm ? (
-                  <JobList
-                    onShowForm={() => setShowForm(true)}
-                    company={company}
-                    jobs={jobs}
-                  />
-                ) : (
-                  <JobForm
-                    onCloseForm={() => setShowForm(false)}
-                    company={company}
-                  />
-                )}
-              </BottomBodyContainer>
-            </BottomContainer>
-          </Container>
-        );
-      })}
-    </List>
+                <BottomBodyContainer>
+                  {!showForm ? (
+                    <CompanyJobList
+                      onShowForm={() => setShowForm(true)}
+                      company={company}
+                      jobs={jobs}
+                      handleOpen={handleOpen}
+                    />
+                  ) : (
+                    <JobForm
+                      onCloseForm={() => setShowForm(false)}
+                      company={company}
+                    />
+                  )}
+                </BottomBodyContainer>
+              </BottomContainer>
+            </Container>
+          );
+        })}
+      </List>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description">
+        <ModalContainer>
+          <JobDetail selectedGig={selectedJob} />
+        </ModalContainer>
+      </Modal>
+    </>
   );
 }
 
@@ -209,6 +250,23 @@ const ListItem = styled.div`
   &:hover {
     background: #f0f0f0;
   }
+`;
+
+const ModalContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border: 2px solid #000;
+  box-shadow: 0px 11px 15px -7px rgb(0 0 0 / 20%),
+    0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%);
+  padding: 32px;
+  max-height: 80%;
+  overflow-y: auto;
 `;
 
 const ShadowBox = styled.div`

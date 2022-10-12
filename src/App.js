@@ -9,6 +9,7 @@ import AuthProvider from './context/auth';
 import PrivateRoute from './components/PrivateRoute';
 import Messages from './pages/Messages';
 import Company from './pages/Company';
+import Jobs from './pages/Jobs';
 
 function App() {
   return (
@@ -49,6 +50,15 @@ function App() {
             element={
               <PrivateRoute>
                 <Company />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            exact
+            path="/jobs"
+            element={
+              <PrivateRoute>
+                <Jobs />
               </PrivateRoute>
             }
           />
