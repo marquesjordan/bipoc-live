@@ -41,9 +41,11 @@ const Jobs = () => {
           {jobs.map((job) => (
             <JobListItem
               key={job.uid}
+              jobId={job.uid}
               job={job}
               selectJob={selectJob}
               user1={user1}
+              selectedGig={selectedGig}
             />
           ))}
         </div>

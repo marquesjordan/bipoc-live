@@ -33,16 +33,26 @@ const JobDetail = ({ selectedGig }) => {
       <hr />
       <h3>Job Description</h3>
       <div style={{ whiteSpace: 'pre-wrap' }}>{selectedGig.jobSummary}</div>
-      <h3>Job Description</h3>
-      <div style={{ whiteSpace: 'pre-wrap' }}>{selectedGig.jobSummary}</div>
-      <div>
-        <h3>Qualifications</h3>
-        <ul>
-          {selectedGig.qualifications.map((item) => {
-            return <li>{item}</li>;
-          })}
-        </ul>
-      </div>
+      {selectedGig.qualifications?.length > 0 && (
+        <div>
+          <h3>Qualifications</h3>
+          <ul>
+            {selectedGig.qualifications.map((item) => {
+              return <li>{item}</li>;
+            })}
+          </ul>
+        </div>
+      )}
+      {selectedGig.duties?.length > 0 && (
+        <div>
+          <h3>Duties</h3>
+          <ul>
+            {selectedGig.duties.map((item) => {
+              return <li>{item}</li>;
+            })}
+          </ul>
+        </div>
+      )}
     </>
   );
 };
