@@ -8,7 +8,6 @@ const JobListItem = ({ job, selectJob, user1, selectedGig, jobId }) => {
       job={job}
       selectedGig={selectedGig}
       onClick={() => selectJob(job)}>
-      {console.log('lslsl', jobId)}
       <div style={{ fontSize: 22, color: '#483d8b', fontWeight: 'bold' }}>
         {job.jobTitle}
       </div>

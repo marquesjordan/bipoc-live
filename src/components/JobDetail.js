@@ -4,11 +4,47 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import React from 'react';
 import styled from 'styled-components';
 import Button from '@mui/material/Button';
+import { db, auth, storage } from '../firebase';
+
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  addDoc,
+  Timestamp,
+  orderBy,
+  setDoc,
+  doc,
+  getDoc,
+  updateDoc,
+} from 'firebase/firestore';
 
 const JobDetail = ({ selectedGig }) => {
+  const userId = auth.currentUser.uid;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const appRef = `${selectedGig.postByCompanyRef + selectedGig.id}`;
+    const stamp = Timestamp.fromDate(new Date());
+
+    await addDoc(collection(db, 'applications', appRef, 'apps'), {
+      userRef: userId,
+      jobRef: selectedGig.id,
+      companyRef: selectedGig.postByCompanyRef,
+      appliedOn: stamp,
+    });
+
+    await addDoc(collection(db, 'users', userId, 'applications'), {
+      appRef,
+      jobRef: selectedGig.id,
+      companyRef: selectedGig.postByCompanyRef,
+      appliedOn: stamp,
+    });
+  };
+
   return (
     <>
-      {console.log('lsls ', selectedGig.qualifications)}
       <h1>{selectedGig.jobTitle}</h1>
       <JobDetailItem>
         <BusinessIcon />
@@ -29,8 +65,12 @@ const JobDetail = ({ selectedGig }) => {
         <JobDetailText>Salary: {selectedGig.salary}</JobDetailText>
       </JobDetailItem>
       <hr />
-      <Button variant="contained">Apply</Button>
-      <hr />
+      <>
+        <Button onClick={handleSubmit} variant="contained">
+          Apply
+        </Button>
+        <hr />
+      </>
       <h3>Job Description</h3>
       <div style={{ whiteSpace: 'pre-wrap' }}>{selectedGig.jobSummary}</div>
       {selectedGig.qualifications?.length > 0 && (

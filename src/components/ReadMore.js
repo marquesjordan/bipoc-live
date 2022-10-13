@@ -9,7 +9,7 @@ const ReadMore = ({ children }) => {
     setIsReadMore(!isReadMore);
   };
   return (
-    <p className="text">
+    <p style={{ fontSize: 14 }} className="text">
       {isReadMore ? (
         text.slice(0, 150)
       ) : (

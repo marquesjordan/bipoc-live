@@ -19,8 +19,12 @@ const Jobs = () => {
 
     const unsub = onSnapshot(q, (querySnapshot) => {
       let _jobs = [];
+
       querySnapshot.forEach((doc) => {
-        _jobs.push(doc.data());
+        let data = {};
+        data = doc.data();
+        data.id = doc.id;
+        _jobs.push(data);
       });
       setJobs(_jobs);
     });
@@ -40,8 +44,8 @@ const Jobs = () => {
           <Title>Jobs List</Title>
           {jobs.map((job) => (
             <JobListItem
-              key={job.uid}
-              jobId={job.uid}
+              key={job.id}
+              jobId={job.id}
               job={job}
               selectJob={selectJob}
               user1={user1}

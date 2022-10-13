@@ -16,7 +16,6 @@ const Company = () => {
     console.log('q', q);
     const unsub = onSnapshot(q, (querySnapshot) => {
       let _companies = [];
-      console.log('lld ', querySnapshot);
       querySnapshot.forEach((doc) => {
         let data = {};
         data = doc.data();
