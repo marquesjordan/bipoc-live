@@ -1,27 +1,37 @@
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import BusinessIcon from '@mui/icons-material/Business';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import React from 'react';
-import styled from 'styled-components';
 import Button from '@mui/material/Button';
-import { db, auth, storage } from '../firebase';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { auth, db } from '../firebase';
 
 import {
-  collection,
-  query,
-  where,
-  onSnapshot,
   addDoc,
+  collection,
+  onSnapshot,
+  query,
   Timestamp,
-  orderBy,
-  setDoc,
-  doc,
-  getDoc,
-  updateDoc,
+  where,
 } from 'firebase/firestore';
 
 const JobDetail = ({ selectedGig }) => {
+  const [hasApplied, setHasApplied] = useState(false);
   const userId = auth.currentUser.uid;
+
+  const jobRefId = `${selectedGig.postByCompanyRef + selectedGig.id}`;
+
+  useEffect(() => {
+    const jobRef = collection(db, 'applications', jobRefId, 'apps');
+    const q = query(jobRef, where('userRef', '==', `${userId.toString()}`));
+
+    const unsub = onSnapshot(q, (querySnapshot) => {
+      setHasApplied(!querySnapshot.empty);
+    });
+
+    return () => unsub();
+  }, [selectedGig]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -66,9 +76,13 @@ const JobDetail = ({ selectedGig }) => {
       </JobDetailItem>
       <hr />
       <>
-        <Button onClick={handleSubmit} variant="contained">
-          Apply
-        </Button>
+        {!hasApplied ? (
+          <Button onClick={handleSubmit} variant="contained">
+            Apply
+          </Button>
+        ) : (
+          <h4>Applied</h4>
+        )}
         <hr />
       </>
       <h3>Job Description</h3>

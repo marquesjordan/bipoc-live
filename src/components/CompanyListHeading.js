@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 // @mui icons-material components
@@ -13,15 +13,44 @@ import Delete from '../components/svg/Delete';
 import Img from '../logo.png';
 
 import { useMediaQuery } from '../hooks/media';
+import { auth, db } from '../firebase';
+
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  query,
+  Timestamp,
+  where,
+  collectionGroup,
+  getDocs,
+} from 'firebase/firestore';
 
 function CompanyListHeading({ company, logo, jobs, deleteImage, setImg }) {
   const navigate = useNavigate();
   const isMobile = useMediaQuery('(max-width: 768px)');
 
+  // useEffect(() => {
+  //   console.log(company);
+  //   const docsSnap = getDocs(collection(db, 'applications'));
+  //   // const appRef = rootRef.collection('apps');
+  //   // const q = query(appRef, where('companyRef', '==', `${company.id}`));
+
+  //   // const unsub = onSnapshot(q, (querySnapshot) => {
+  //   //   // setHasApplied(!querySnapshot.empty);
+  //   //   console.log(querySnapshot);
+  //   // });
+  //   // // const querySnapshot = getDocs(apps);
+  //   // return () => unsub();
+  //   docsSnap.forEach((doc) => {
+  //     console.log(doc.data()); // "doc1", "doc2" and "doc3"
+  //   });
+  // }, []);
+
   return (
     <ShadowBox>
       <Header isMobile={isMobile}>
-        <LogoContainer>
+        {/* <LogoContainer>
           <LogoImg src={logo || Img} alt="logo" isMobile={isMobile} />
           <div className="overlay">
             <div>
@@ -38,7 +67,7 @@ function CompanyListHeading({ company, logo, jobs, deleteImage, setImg }) {
               />
             </div>
           </div>
-        </LogoContainer>
+        </LogoContainer> */}
         <HeaderInfo>
           <CompanyTitle>{company.companyName}</CompanyTitle>
           <CompanyHeading>{company.heading}</CompanyHeading>

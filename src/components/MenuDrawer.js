@@ -17,6 +17,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import SettingsIcon from '@mui/icons-material/Settings';
 import FavoritesIcon from '@mui/icons-material/Favorite';
 import BusinessIcon from '@mui/icons-material/Business';
+import PeoplesIcon from '@mui/icons-material/People';
 import Hamburger from './svg/Hamburger';
 import { Link } from 'react-router-dom';
 
@@ -48,10 +49,10 @@ export default function MenuDrawer() {
     { text: 'Account', link: '/profile' },
     { text: 'Company', link: '/company' },
     { text: 'Messages', link: '/messages' },
-    { text: 'Settings', link: '/settings' },
     { text: 'Jobs', link: '/jobs' },
-    { text: 'Connections', link: '/connections' },
     { text: 'Applicants', link: '/applicants' },
+    { text: 'Settings', link: '/settings' },
+    { text: 'Connections', link: '/connections' },
     { text: 'Notifications', link: '/notifications' },
     { text: 'Favorites', link: '/favorites' },
   ];
@@ -75,10 +76,10 @@ export default function MenuDrawer() {
                       <AccountBoxIcon />,
                       <BusinessIcon />,
                       <MailIcon />,
+                      <WorkIcon />,
+                      <PeoplesIcon />,
                       <SettingsIcon />,
-                      <WorkIcon />,
                       <PeopleIcon />,
-                      <WorkIcon />,
                       <NotificationsIcon />,
                       <FavoritesIcon />,
                     ][index]

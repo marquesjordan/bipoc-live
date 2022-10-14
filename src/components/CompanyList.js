@@ -21,9 +21,11 @@ import JobDetail from './JobDetail';
 import JobForm from './JobForm';
 
 import Modal from '@mui/material/Modal';
+import { useMediaQuery } from '../hooks/media';
 
 function CompanyList({ companies }) {
   const navigate = useNavigate();
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   const [img, setImg] = useState('');
   const [company, setCompany] = useState();
@@ -156,7 +158,7 @@ function CompanyList({ companies }) {
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
-        <ModalContainer>
+        <ModalContainer isMobile={isMobile}>
           <JobDetail selectedGig={selectedJob} />
         </ModalContainer>
       </Modal>
@@ -181,6 +183,7 @@ const ModalContainer = styled.div`
   padding: 32px;
   max-height: 80%;
   overflow-y: auto;
+  width: ${({ isMobile }) => isMobile && `90%`};
 `;
 
 const BottomContainer = styled.div`
