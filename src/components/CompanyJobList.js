@@ -3,7 +3,13 @@ import styled from 'styled-components';
 import EmptyBox from './EmptyBox';
 import CompanyJobItem from './CompanyJobItem';
 
-function CompanyJobList({ company, onShowForm, jobs = [], handleOpen }) {
+function CompanyJobList({
+  company,
+  onShowForm,
+  jobs = [],
+  handleOpenJobView,
+  handleShowApplicants,
+}) {
   return (
     <div>
       <AddBtnContainer>
@@ -13,7 +19,13 @@ function CompanyJobList({ company, onShowForm, jobs = [], handleOpen }) {
       </AddBtnContainer>
       {jobs.length === 0 && <EmptyBox text="No Jobs" />}
       {jobs.map((job) => {
-        return <CompanyJobItem handleOpen={handleOpen} job={job} />;
+        return (
+          <CompanyJobItem
+            handleOpenJobView={handleOpenJobView}
+            handleShowApplicants={handleShowApplicants}
+            job={job}
+          />
+        );
       })}
     </div>
   );

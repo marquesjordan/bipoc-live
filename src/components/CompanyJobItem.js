@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { useMediaQuery } from '../hooks/media';
 import ActiveSwitch from './ActiveSwitch';
 import ReadMore from './ReadMore';
-
+import CompanyJobItemHeader from './CompanyJobItemHeader';
 import EditIcon from '@mui/icons-material/Edit';
 import PeopleIcon from '@mui/icons-material/People';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -13,13 +13,12 @@ import Delete from '../components/svg/Delete';
 
 import { db } from '../firebase';
 
-function CompanyJobItem({ job, handleOpen }) {
+function CompanyJobItem({ job, handleOpenJobView, handleShowApplicants }) {
   const [applicants, setApplicants] = useState([]);
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   useEffect(() => {
     const jobRef = `${job.postByCompanyRef + job.id}`;
-    console.log(jobRef);
     const appCol = collection(db, 'applications', jobRef, 'apps');
     const q = query(appCol, orderBy('appliedOn', 'asc'));
 
@@ -40,39 +39,10 @@ function CompanyJobItem({ job, handleOpen }) {
   }, []);
 
   return (
-    <div
-      style={{
-        border: '2px solid #5e76bf',
-        borderRadius: 10,
-        padding: 8,
-        marginBottom: 10,
-        display: 'flex',
-      }}>
-      <div>
-        <Header isMobile={isMobile}>
-          <div style={{ flex: 1 }}>
-            <Title>{job.jobTitle} </Title>
-            <div>
-              <h4 style={{ fontWeight: 'normal', margin: 0 }}>
-                {job.companyName} - {job.companyUrl}
-              </h4>
-            </div>
-          </div>
-          <JobItemDetails isMobile={isMobile}>
-            <JobDesc>
-              Employment Type:{' '}
-              <span style={{ fontWeight: 'normal' }}>{job.employmentType}</span>
-            </JobDesc>
-            <JobDesc>
-              Location:{' '}
-              <span style={{ fontWeight: 'normal' }}>{job.location}</span>
-            </JobDesc>
-            <JobDesc>
-              Salary: <span style={{ fontWeight: 'normal' }}>{job.salary}</span>
-            </JobDesc>
-          </JobItemDetails>
-        </Header>
-        <ReadMore>{job.jobSummary}</ReadMore>
+    <Body>
+      <div style={{ flex: 1 }}>
+        <CompanyJobItemHeader job={job} />
+        {/* <ReadMore>{job.jobSummary}</ReadMore> */}
         <div
           style={{
             marginTop: 10,
@@ -86,23 +56,35 @@ function CompanyJobItem({ job, handleOpen }) {
           <ActiveSwitch isActive={job.active} jobId={job.id} />
         </div>
       </div>
-      <div>
+      <RightMenu>
         <BtnContainer isMobile={isMobile}>
-          <Btn onClick={() => handleOpen(job)}>
+          <Btn isMobile={isMobile} onClick={() => handleOpenJobView(job)}>
             {isMobile ? <VisibilityIcon /> : 'View'}
           </Btn>
-          <Btn>
+          <Btn
+            isMobile={isMobile}
+            onClick={() => handleShowApplicants(job, applicants)}>
             {isMobile ? <PeopleIcon /> : 'Applicants'} - {applicants.length}
           </Btn>
-          <Btn>{isMobile ? <EditIcon /> : 'Edit'}</Btn>
-          <Btn style={{ color: 'red' }}>{isMobile ? <Delete /> : 'Delete'}</Btn>
+          <Btn isMobile={isMobile}>{isMobile ? <EditIcon /> : 'Edit'}</Btn>
+          <Btn isMobile={isMobile} style={{ color: 'red' }}>
+            {isMobile ? <Delete /> : 'Delete'}
+          </Btn>
         </BtnContainer>
-      </div>
-    </div>
+      </RightMenu>
+    </Body>
   );
 }
 
 export default CompanyJobItem;
+
+const Body = styled.div`
+  border: 2px solid #5e76bf;
+  padding: 8px;
+  display: flex;
+`;
+
+const RightMenu = styled.div``;
 
 const Header = styled.div`
   display: flex;
@@ -139,7 +121,7 @@ const Btn = styled.div`
   font-weight: bold;
   color: darkblue;
   cursor: pointer;
-  padding: 10px;
+  padding: ${({ isMobile }) => (isMobile ? `10px` : `0`)};
   display: flex;
   width: 100%;
   justify-content: center;

@@ -11,6 +11,7 @@ import {
 import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import Delete from '../components/svg/Delete';
 import { useNavigate } from 'react-router-dom';
+import ProfileHeader from '../components/ProfileHeader';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ const Profile = () => {
       };
       uploadImg();
     }
-  }, [img]);
+  }, [img, user.avatarPath]);
 
   const deleteImage = async () => {
     try {
@@ -73,32 +74,7 @@ const Profile = () => {
 
   return user ? (
     <section>
-      <div className="profile_container">
-        <div className="img_container">
-          <img src={user.avatar || Img} alt="avatar" />
-          <div className="overlay">
-            <div>
-              <label htmlFor="photo">
-                <Camera />
-              </label>
-              {user.avatar ? <Delete deleteImage={deleteImage} /> : null}
-              <input
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                id="photo"
-                onChange={(e) => setImg(e.target.files[0])}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="text_container">
-          <h3>{user.name}</h3>
-          <p>{user.email}</p>
-          <hr />
-          <small>Joined on {user.createdAt.toDate().toDateString()}</small>
-        </div>
-      </div>
+      <ProfileHeader user={user} deleteImage={deleteImage} setImg={setImg} />
     </section>
   ) : null;
 };

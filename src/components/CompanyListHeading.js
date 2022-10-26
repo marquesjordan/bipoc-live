@@ -50,27 +50,31 @@ function CompanyListHeading({ company, logo, jobs, deleteImage, setImg }) {
   return (
     <ShadowBox>
       <Header isMobile={isMobile}>
-        {/* <LogoContainer>
-          <LogoImg src={logo || Img} alt="logo" isMobile={isMobile} />
-          <div className="overlay">
-            <div>
-              <label htmlFor="photo">
-                <Camera />
-              </label>
-              {logo ? <Delete deleteImage={deleteImage} /> : null}
-              <input
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                id="photo"
-                onChange={(e) => setImg(e.target.files[0])}
-              />
-            </div>
-          </div>
-        </LogoContainer> */}
         <HeaderInfo>
-          <CompanyTitle>{company.companyName}</CompanyTitle>
-          <CompanyHeading>{company.heading}</CompanyHeading>
+          <Heading isMobile={isMobile}>
+            <LogoContainer isMobile={isMobile}>
+              <LogoImg src={logo || Img} alt="logo" isMobile={isMobile} />
+              <div className="overlay">
+                <div>
+                  <label htmlFor="photo">
+                    <Camera />
+                  </label>
+                  {logo ? <Delete deleteImage={deleteImage} /> : null}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    id="photo"
+                    onChange={(e) => setImg(e.target.files[0])}
+                  />
+                </div>
+              </div>
+            </LogoContainer>
+            <div style={{ width: '100%' }}>
+              <CompanyTitle>{company.companyName}</CompanyTitle>
+              <CompanyHeading>{company.heading}</CompanyHeading>
+            </div>
+          </Heading>
           <div>
             <CompanyBio>{company.companyBio}</CompanyBio>
           </div>
@@ -109,12 +113,13 @@ function CompanyListHeading({ company, logo, jobs, deleteImage, setImg }) {
 
 export default CompanyListHeading;
 
+// box-shadow: 1px 2px 10px var(--color-4);
 const ShadowBox = styled.div`
   margin: 10px auto;
-  box-shadow: 1px 2px 10px var(--color-4);
   padding: 10px 20px;
   border-radius: 5px;
   background-color: white;
+  border: 2px solid lightgrey;
 `;
 
 const CompanyTitle = styled.h2`
@@ -143,9 +148,14 @@ const Header = styled.div`
   align-items: ${({ isMobile }) => isMobile && `center`};
 `;
 
+const Heading = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: ${({ isMobile }) => isMobile && `column`};
+`;
+
 const HeaderInfo = styled.div`
   flex: 1;
-  padding: 20px;
 `;
 
 const HeaderData = styled.div`
@@ -188,7 +198,7 @@ const LogoContainer = styled.div`
   margin-right: 20px;
   display: flex;
   align-items: center;
-
+  margin-bottom: 15px;
   &:hover img {
     opacity: 0.4;
   }
@@ -199,8 +209,8 @@ const LogoContainer = styled.div`
 `;
 
 const LogoImg = styled.img`
-  width: ${({ isMobile }) => (isMobile ? `100%` : `250px`)};
-  height: ${({ isMobile }) => (isMobile ? `85px` : `150px`)};
+  width: ${({ isMobile }) => (isMobile ? `100%` : `175px`)};
+  height: ${({ isMobile }) => (isMobile ? `75px` : `75px`)};
   border: 1px solid var(--color-4);
   transition: 0.5s ease-in-out all;
 `;

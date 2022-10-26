@@ -22,6 +22,7 @@ import JobForm from './JobForm';
 
 import Modal from '@mui/material/Modal';
 import { useMediaQuery } from '../hooks/media';
+import CompanyJobApplicants from './CompanyJobApplicants';
 
 function CompanyList({ companies }) {
   const navigate = useNavigate();
@@ -30,14 +31,24 @@ function CompanyList({ companies }) {
   const [img, setImg] = useState('');
   const [company, setCompany] = useState();
   const [jobs, setJobs] = useState([]);
+  const [applicants, setApplicants] = useState([]);
   const [selectedJob, setSelectedJob] = useState({});
   const [showForm, setShowForm] = useState(false);
+  const [showApplicants, setShowApplicants] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const handleOpen = (jobItem) => {
+  const handleOpenJobView = (jobItem) => {
     setSelectedJob(jobItem);
     setOpen(true);
   };
+
+  const handleShowApplicants = (jobs, _applicants) => {
+    console.log('Job ', jobs);
+    setSelectedJob(jobs);
+    setApplicants(_applicants);
+    setShowApplicants(true);
+  };
+
   const handleClose = () => {
     setSelectedJob({});
     setOpen(false);
@@ -118,13 +129,15 @@ function CompanyList({ companies }) {
         {companies.map((company) => {
           return (
             <Container>
-              <CompanyListHeading
-                company={company}
-                jobs={jobs}
-                logo={company.logo}
-                deleteImage={deleteImage}
-                setImg={setImg}
-              />
+              {!showApplicants && (
+                <CompanyListHeading
+                  company={company}
+                  jobs={jobs}
+                  logo={company.logo}
+                  deleteImage={deleteImage}
+                  setImg={setImg}
+                />
+              )}
               <BottomContainer>
                 {/* <BottomMenuContainer>
                 <div>
@@ -134,18 +147,31 @@ function CompanyList({ companies }) {
               </BottomMenuContainer> */}
 
                 <BottomBodyContainer>
-                  {!showForm ? (
-                    <CompanyJobList
-                      onShowForm={() => setShowForm(true)}
-                      company={company}
-                      jobs={jobs}
-                      handleOpen={handleOpen}
-                    />
+                  {!showApplicants ? (
+                    <>
+                      {!showForm ? (
+                        <CompanyJobList
+                          onShowForm={() => setShowForm(true)}
+                          company={company}
+                          jobs={jobs}
+                          handleOpenJobView={handleOpenJobView}
+                          handleShowApplicants={handleShowApplicants}
+                        />
+                      ) : (
+                        <JobForm
+                          onCloseForm={() => setShowForm(false)}
+                          company={company}
+                        />
+                      )}
+                    </>
                   ) : (
-                    <JobForm
-                      onCloseForm={() => setShowForm(false)}
-                      company={company}
-                    />
+                    <>
+                      <CompanyJobApplicants
+                        job={selectedJob}
+                        applicants={applicants}
+                        handleBack={() => setShowApplicants(false)}
+                      />
+                    </>
                   )}
                 </BottomBodyContainer>
               </BottomContainer>
@@ -168,6 +194,7 @@ function CompanyList({ companies }) {
 
 export default CompanyList;
 
+// box-shadow: 0px 11px 15px -7px rgb(0 0 0 / 20%),
 const ModalContainer = styled.div`
   position: absolute;
   top: 50%;
@@ -178,7 +205,7 @@ const ModalContainer = styled.div`
   transform: translate(-50%, -50%);
   background-color: #fff;
   border: 2px solid #000;
-  box-shadow: 0px 11px 15px -7px rgb(0 0 0 / 20%),
+  border: 2px solid lightgrey;
     0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%);
   padding: 32px;
   max-height: 80%;
@@ -191,10 +218,11 @@ const BottomContainer = styled.div`
   flex-direction: row;
 `;
 
+// box-shadow: 1px 2px 10px var(--color-4);
 const BottomBodyContainer = styled.div`
-  box-shadow: 1px 2px 10px var(--color-4);
   padding: 10px 20px;
   border-radius: 5px;
   background-color: white;
+  border: 2px solid lightgrey;
   flex: 1;
 `;

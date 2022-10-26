@@ -7,8 +7,8 @@ function EmptyBox({ text }) {
 
 export default EmptyBox;
 
+//box-shadow: 1px 2px 10px var(--color-4);
 const BottomBodyContainer = styled.div`
-  box-shadow: 1px 2px 10px var(--color-4);
   padding: 10px 20px;
   border-radius: 5px;
   background-color: white;
@@ -20,4 +20,5 @@ const BottomBodyContainer = styled.div`
   justify-content: center;
   align-items: center;
   color: #6c6a6a;
+  border: 2px solid lightgrey;
 `;

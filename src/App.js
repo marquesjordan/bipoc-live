@@ -10,6 +10,7 @@ import PrivateRoute from './components/PrivateRoute';
 import Messages from './pages/Messages';
 import Company from './pages/Company';
 import Jobs from './pages/Jobs';
+import CompanyJobApplicants from './components/CompanyJobApplicants';
 
 function App() {
   return (
