@@ -77,4 +77,8 @@ const BackButton = styled.div`
   color: blue;
   cursor: pointer;
   margin-bottom: 10px;
+
+  &:hover {
+    color: lightblue;
+  }
 `;

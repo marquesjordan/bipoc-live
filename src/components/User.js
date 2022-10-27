@@ -14,7 +14,7 @@ const User = ({ user1, user, selectUser, chat }) => {
     });
 
     return () => unsub();
-  }, []);
+  }, [user1, user2]);
 
   return (
     <>

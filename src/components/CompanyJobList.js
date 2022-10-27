@@ -41,4 +41,9 @@ const AddBtnContainer = styled.div`
 const AddBtn = styled.a`
   color: blue;
   cursor: pointer;
+  font-weight: bold;
+
+  &:hover {
+    color: lightblue;
+  }
 `;
