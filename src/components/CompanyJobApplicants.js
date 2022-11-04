@@ -6,10 +6,12 @@ import CompanyJobItemHeader from './CompanyJobItemHeader';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import ApplicantHeader from './ApplicantHeader';
+import { style } from '@mui/system';
 
 function CompanyJobApplicants({ job, applicants, handleBack }) {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [userList, setUserList] = useState([]);
+  const [showProfile, setShowProfile] = useState(false);
 
   useEffect(() => {
     const usersRef = collection(db, 'users');
@@ -30,40 +32,80 @@ function CompanyJobApplicants({ job, applicants, handleBack }) {
     });
   }, [applicants]);
 
+  const handleClick = (item) => {
+    console.log(item);
+    setShowProfile(true);
+  };
+
   return (
-    <>
-      <BackButton onClick={handleBack}>{'<< BACK'}</BackButton>
+    <Container>
+      <div style={{ marginBottom: 25 }}>
+        <BackButton onClick={handleBack}>{'RETURN TO JOBS'}</BackButton>
+      </div>
       <Body>
-        <div style={{ flex: 1, paddingBottom: 20, borderBottom: '1px solid' }}>
+        <div style={{ flex: 1, paddingBottom: 20 }}>
           <CompanyJobItemHeader job={job} />
         </div>
       </Body>
       <AppBody>
-        <div
-          style={{
-            flexBasis: 350,
-            borderRight: '2px solid',
-            height: 450,
-          }}>
-          {userList.map((item) => {
-            return <ApplicantHeader user={item} />;
-          }, [])}
-        </div>
-        <div></div>
+        <AppList isMobile={isMobile} showProfile={showProfile}>
+          <AppHeader>Applicants</AppHeader>
+          <div>
+            {userList.map((item) => {
+              return (
+                <ApplicantHeader
+                  onClick={() => handleClick(item)}
+                  user={item}
+                />
+              );
+            }, [])}
+          </div>
+        </AppList>
+        <AppProfileBody isMobile={isMobile} showProfile={showProfile}>
+          <div onClick={() => setShowProfile(false)}>X</div>
+        </AppProfileBody>
       </AppBody>
-    </>
+    </Container>
   );
 }
 
 export default CompanyJobApplicants;
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
 const Body = styled.div`
   display: flex;
+`;
+
+const AppList = styled.div`
+  flex-basis: ${({ isMobile }) => (isMobile ? `100%` : `350px`)};
+  border-right: ${({ isMobile }) => (isMobile ? `0` : `2px solid;`)};
+  display: ${({ isMobile, showProfile }) => isMobile && showProfile && `none`};
+`;
+
+const AppProfileBody = styled.div`
+  display: ${({ isMobile, showProfile }) => isMobile && !showProfile && `none`};
 `;
 
 const AppBody = styled.div`
   border: 2px solid #5e76bf;
   display: flex;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  flex: 1;
+  background: #fff;
+`;
+
+const AppHeader = styled.div`
+  background: #5e76bf;
+  color: #fff;
+  font-weight: bold;
+  padding: 8px;
+  margin-bottom: 4px;
 `;
 
 const ListContainer = styled.div`
@@ -72,11 +114,12 @@ const ListContainer = styled.div`
   height: 450px;
 `;
 
-const BackButton = styled.div`
+const BackButton = styled.span`
   font-weight: bold;
   color: blue;
   cursor: pointer;
-  margin-bottom: 10px;
+  border: 1px solid blue;
+  padding: 5px;
 
   &:hover {
     color: lightblue;

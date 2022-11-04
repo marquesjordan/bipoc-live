@@ -146,34 +146,32 @@ function CompanyList({ companies }) {
                 </div>
               </BottomMenuContainer> */}
 
-                <BottomBodyContainer>
-                  {!showApplicants ? (
-                    <>
-                      {!showForm ? (
-                        <CompanyJobList
-                          onShowForm={() => setShowForm(true)}
-                          company={company}
-                          jobs={jobs}
-                          handleOpenJobView={handleOpenJobView}
-                          handleShowApplicants={handleShowApplicants}
-                        />
-                      ) : (
-                        <JobForm
-                          onCloseForm={() => setShowForm(false)}
-                          company={company}
-                        />
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      <CompanyJobApplicants
-                        job={selectedJob}
-                        applicants={applicants}
-                        handleBack={() => setShowApplicants(false)}
+                {!showApplicants ? (
+                  <BottomBodyContainer isMobile={isMobile}>
+                    {!showForm ? (
+                      <CompanyJobList
+                        onShowForm={() => setShowForm(true)}
+                        company={company}
+                        jobs={jobs}
+                        handleOpenJobView={handleOpenJobView}
+                        handleShowApplicants={handleShowApplicants}
                       />
-                    </>
-                  )}
-                </BottomBodyContainer>
+                    ) : (
+                      <JobForm
+                        onCloseForm={() => setShowForm(false)}
+                        company={company}
+                      />
+                    )}
+                  </BottomBodyContainer>
+                ) : (
+                  <BottomApplicantContainer>
+                    <CompanyJobApplicants
+                      job={selectedJob}
+                      applicants={applicants}
+                      handleBack={() => setShowApplicants(false)}
+                    />
+                  </BottomApplicantContainer>
+                )}
               </BottomContainer>
             </Container>
           );
@@ -220,9 +218,15 @@ const BottomContainer = styled.div`
 
 // box-shadow: 1px 2px 10px var(--color-4);
 const BottomBodyContainer = styled.div`
-  padding: 10px 20px;
+  padding: ${({ isMobile }) => (isMobile ? `4px` : `0`)};
   border-radius: 5px;
-  background-color: white;
-  border: 2px solid lightgrey;
   flex: 1;
+  height: ${({ isMobile }) => (isMobile ? `100%` : `calc(100vh - 110px)`)};
+`;
+
+const BottomApplicantContainer = styled.div`
+  padding: ${({ isMobile }) => (isMobile ? `4px` : `10px 20px`)};
+  border-radius: 5px;
+  flex: 1;
+  height: ${({ isMobile }) => (isMobile ? `100%` : `calc(100vh - 110px)`)};
 `;

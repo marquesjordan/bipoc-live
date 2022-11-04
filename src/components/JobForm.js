@@ -59,13 +59,15 @@ function JobForm({ company, onCloseForm }) {
   };
 
   const handleDutyChange = (e) => {
+    console.log(e.target.value);
     setDutyItem(e.target.value);
   };
 
   const handleDutyAdd = () => {
     const temp = dutiesList;
-    temp.push(requiredItem);
+    temp.push(dutyItem);
     setDutiesList(temp);
+
     setDutyItem('');
   };
 
@@ -139,7 +141,7 @@ function JobForm({ company, onCloseForm }) {
         </CloseBtnContainer>
         <h3>Create Job Post</h3>
         <form className="form" onSubmit={handleSubmit}>
-          <FormRow>
+          <FormRow isMobile={isMobile}>
             <div className="input_container">
               <label htmlFor="companyName">Job Title</label>
               <input
@@ -160,7 +162,7 @@ function JobForm({ company, onCloseForm }) {
               />
             </div>
           </FormRow>
-          <FormRow>
+          <FormRow isMobile={isMobile}>
             <div className="input_container">
               <label htmlFor="employmentType">Employment Type</label>
               <input
@@ -191,7 +193,7 @@ function JobForm({ company, onCloseForm }) {
             />
           </div>
           <hr style={{ marginTop: 20 }} />
-          <FormRow>
+          <FormRow isMobile={isMobile}>
             <div className="input_container">
               <label htmlFor="companyName">Company Name</label>
               <input
@@ -253,6 +255,17 @@ function JobForm({ company, onCloseForm }) {
                 +
               </div>
             </div>
+            <div style={{ padding: '10px 0' }}>
+              <ul>
+                {dutiesList.map((item) => {
+                  return (
+                    <li key={item} style={{ marginBottom: 5 }}>
+                      {item}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
           </div>
           <div className="input_container">
             <label htmlFor="qualifiication">Qualifications (optional)</label>
@@ -287,7 +300,11 @@ function JobForm({ company, onCloseForm }) {
             <div style={{ padding: '10px 0' }}>
               <ul>
                 {qualificationList.map((item) => {
-                  return <li style={{ marginBottom: 5 }}>{item}</li>;
+                  return (
+                    <li key={item} style={{ marginBottom: 5 }}>
+                      {item}
+                    </li>
+                  );
                 })}
               </ul>
             </div>
@@ -331,4 +348,5 @@ const CloseBtn = styled.a`
 
 const FormRow = styled.div`
   display: flex;
+  flex-direction: ${({ isMobile }) => (isMobile ? `column` : `row`)};
 `;

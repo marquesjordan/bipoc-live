@@ -195,7 +195,7 @@ const Social = styled.div`
 
 const LogoContainer = styled.div`
   position: relative;
-  margin-right: 20px;
+  margin-right: ${({ isMobile }) => (isMobile ? `0` : `20px`)};
   display: flex;
   align-items: center;
   margin-bottom: 15px;

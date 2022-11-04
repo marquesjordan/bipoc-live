@@ -344,6 +344,10 @@ section .form {
   .message_wrapper p {
     max-width: 75%;
   }
+
+  section .form {
+    padding: 0;
+  }
 }
 
 @media screen and (max-width: 576px) {

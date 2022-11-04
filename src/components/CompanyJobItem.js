@@ -43,18 +43,12 @@ function CompanyJobItem({ job, handleOpenJobView, handleShowApplicants }) {
       <div style={{ flex: 1 }}>
         <CompanyJobItemHeader job={job} />
         {/* <ReadMore>{job.jobSummary}</ReadMore> */}
-        <div
-          style={{
-            marginTop: 10,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
+        <Footer isMobile={isMobile}>
           <small>
             Created: <Moment fromNow>{job.createdAt.toDate()}</Moment>
           </small>
           <ActiveSwitch isActive={job.active} jobId={job.id} />
-        </div>
+        </Footer>
       </div>
       <RightMenu>
         <BtnContainer isMobile={isMobile}>
@@ -82,9 +76,18 @@ const Body = styled.div`
   border: 2px solid #5e76bf;
   padding: 8px;
   display: flex;
+  background: white;
 `;
 
 const RightMenu = styled.div``;
+
+const Footer = styled.div`
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: ${({ isMobile }) => (isMobile ? `flex-start` : `center`)};
+  flex-direction: ${({ isMobile }) => (isMobile ? `column` : `row`)};
+`;
 
 const Header = styled.div`
   display: flex;

@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import Img from '../avatar.jpg';
 import styled from 'styled-components';
 
-const ApplicantHeader = ({ user }) => {
+const ApplicantHeader = ({ user, onClick }) => {
   const navigate = useNavigate();
 
   return (
-    <Container>
+    <Container onClick={onClick}>
       <div className="img_container">
         <img src={user.avatar || Img} alt="avatar" />
         <div className="overlay">
