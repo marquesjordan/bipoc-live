@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { setDoc, doc, Timestamp } from 'firebase/firestore';
+import { setDoc, doc, Timestamp, collection } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 
@@ -41,6 +41,18 @@ const Register = () => {
         password,
         createdAt: Timestamp.fromDate(new Date()),
         isOnline: true,
+      });
+
+      const profileRef = collection(db, 'profiles');
+
+      await setDoc(doc(profileRef, result.user.uid), {
+        displayName: name,
+        email: email,
+        title: '',
+        pronoun: '',
+        location: '',
+        about: '',
+        lastUpdated: Timestamp.fromDate(new Date()),
       });
 
       setData({

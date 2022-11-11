@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Hero from '../components/Hero';
 import HomeGroups from '../components/HomeGroups';
 import styled from 'styled-components';

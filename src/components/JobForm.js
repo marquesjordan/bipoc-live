@@ -73,7 +73,6 @@ function JobForm({ company, onCloseForm }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('kdskdkks');
     setData({ ...data, error: null, loading: true });
 
     let url;

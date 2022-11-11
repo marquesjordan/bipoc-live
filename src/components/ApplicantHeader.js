@@ -1,10 +1,22 @@
-import React from 'react';
+import { doc, getDoc } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Img from '../avatar.jpg';
 import styled from 'styled-components';
+import Img from '../avatar.jpg';
+import { db } from '../firebase';
 
 const ApplicantHeader = ({ user, onClick }) => {
   const navigate = useNavigate();
+
+  const [profileData, setProfileData] = useState([]);
+
+  useEffect(() => {
+    getDoc(doc(db, 'profiles', user.uid)).then((docSnap) => {
+      if (docSnap.exists) {
+        setProfileData(docSnap.data());
+      }
+    });
+  }, [user]);
 
   return (
     <Container onClick={onClick}>
@@ -22,10 +34,14 @@ const ApplicantHeader = ({ user, onClick }) => {
           </div>
         </div>
       </div>
-      <div style={{ fontSize: 12 }}>
-        <h3>{user.name}</h3>
-        <h4>{user.email}</h4>
-      </div>
+      {profileData.displayName && profileData.title && (
+        <div style={{ fontSize: 12 }}>
+          <h2 style={{ margin: 0, lineHeight: 1.3 }}>
+            {profileData.displayName}
+          </h2>
+          <h3 style={{ margin: 0, lineHeight: 1.3 }}>{profileData.title}</h3>
+        </div>
+      )}
     </Container>
   );
 };

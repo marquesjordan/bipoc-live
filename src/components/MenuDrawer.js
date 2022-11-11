@@ -66,7 +66,10 @@ export default function MenuDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}>
       <List>
         {MenuItems.map(({ text, link }, index) => (
-          <Link to={link} style={{ textDecoration: 'none', color: '#fff' }}>
+          <Link
+            key={index}
+            to={link}
+            style={{ textDecoration: 'none', color: '#fff' }}>
             <ListItem key={text} disablePadding>
               <ListItemButton>
                 <ListItemIcon style={{ color: '#ffffff' }}>

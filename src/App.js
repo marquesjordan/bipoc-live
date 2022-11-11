@@ -11,6 +11,7 @@ import Messages from './pages/Messages';
 import Company from './pages/Company';
 import Jobs from './pages/Jobs';
 import CompanyJobApplicants from './components/CompanyJobApplicants';
+import CreateProfile from './pages/CreateProfile';
 
 function App() {
   return (
@@ -18,15 +19,7 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
-          <Route
-            exact
-            path="/"
-            element={
-              <PrivateRoute>
-                <Home />
-              </PrivateRoute>
-            }
-          />
+          <Route exact path="/" element={<Home />} />
           <Route
             exact
             path="/messages"
@@ -65,6 +58,7 @@ function App() {
           />
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/login" element={<Login />} />
+          <Route exact path="/create-profile" element={<CreateProfile />} />
         </Routes>
       </Router>
     </AuthProvider>

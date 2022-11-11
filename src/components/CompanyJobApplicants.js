@@ -7,11 +7,12 @@ import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import ApplicantHeader from './ApplicantHeader';
 import { style } from '@mui/system';
+import ProfileDisplay from './ProfileDisplay';
 
 function CompanyJobApplicants({ job, applicants, handleBack }) {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const [userList, setUserList] = useState([]);
-  const [showProfile, setShowProfile] = useState(false);
+  const [showProfile, setShowProfile] = useState(null);
 
   useEffect(() => {
     const usersRef = collection(db, 'users');
@@ -19,12 +20,10 @@ function CompanyJobApplicants({ job, applicants, handleBack }) {
 
     applicants.forEach((item) => {
       const q = query(usersRef, where('uid', '==', item.userRef));
-      console.log(q);
       const unsub = onSnapshot(q, (querySnapshot) => {
         querySnapshot.forEach((doc) => {
           _users.push(doc.data());
         });
-        console.log(_users);
         setUserList(_users);
       });
 
@@ -33,8 +32,7 @@ function CompanyJobApplicants({ job, applicants, handleBack }) {
   }, [applicants]);
 
   const handleClick = (item) => {
-    console.log(item);
-    setShowProfile(true);
+    setShowProfile(item);
   };
 
   return (
@@ -62,7 +60,10 @@ function CompanyJobApplicants({ job, applicants, handleBack }) {
           </div>
         </AppList>
         <AppProfileBody isMobile={isMobile} showProfile={showProfile}>
-          <div onClick={() => setShowProfile(false)}>X</div>
+          {/* <div onClick={() => setShowProfile(null)}>Close</div> */}
+          <div style={{ padding: 16 }}>
+            {showProfile && <ProfileDisplay userId={showProfile.uid} />}
+          </div>
         </AppProfileBody>
       </AppBody>
     </Container>
@@ -88,7 +89,12 @@ const AppList = styled.div`
 `;
 
 const AppProfileBody = styled.div`
+  flex: 1;
+  padding: 16px;
+  overflow: auto;
+  max-height: 100%;
   display: ${({ isMobile, showProfile }) => isMobile && !showProfile && `none`};
+  background: #ededed;
 `;
 
 const AppBody = styled.div`
@@ -98,6 +104,7 @@ const AppBody = styled.div`
   border-top-right-radius: 8px;
   flex: 1;
   background: #fff;
+  max-height: 80%;
 `;
 
 const AppHeader = styled.div`

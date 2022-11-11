@@ -57,7 +57,7 @@ section .form {
   padding: 0px 20px;
 }
 .input_container {
-  margin-top: 20px;
+  margin-top: 10px;
   flex: 1;
 }
 .input_container input {
