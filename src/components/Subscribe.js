@@ -39,7 +39,7 @@ function Subscribe(props) {
       <Container style={{ display: 'flex', flexDirection: 'column' }}>
         <h2 style={{ textAlign: 'center', color: '#000' }}>Stay Connected</h2>
         <p style={{ textAlign: 'center' }}>
-          Please submit your email for updates. Thank you for visiting.
+          Please submit your email for updates. Thank you for visiting.s
         </p>
         <FormRow isMobile={isMobile}>
           <div className="input_container">
@@ -90,6 +90,10 @@ const FormRow = styled.div`
   width: ${({ isMobile }) => (isMobile ? `90%` : `60%`)};
   margin: auto;
   align-items: center;
+
+  div.input_container {
+    width: 100%;
+  }
 
   div {
     margin: 0;
