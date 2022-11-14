@@ -46,7 +46,7 @@ export default function MenuDrawer() {
 
   const MenuItems = [
     { text: 'Home', link: '/' },
-    { text: 'Account', link: '/profile' },
+    { text: 'Profile', link: '/profile' },
     { text: 'Company', link: '/company' },
     { text: 'Messages', link: '/messages' },
     { text: 'Jobs', link: '/jobs' },

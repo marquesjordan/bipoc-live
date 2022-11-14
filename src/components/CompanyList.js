@@ -164,7 +164,7 @@ function CompanyList({ companies }) {
                     )}
                   </BottomBodyContainer>
                 ) : (
-                  <BottomApplicantContainer>
+                  <BottomApplicantContainer isMobile={isMobile}>
                     <CompanyJobApplicants
                       job={selectedJob}
                       applicants={applicants}
@@ -180,8 +180,8 @@ function CompanyList({ companies }) {
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
+        aria-labelledby="Job Modal"
+        aria-describedby="Job Description">
         <ModalContainer isMobile={isMobile}>
           <JobDetail selectedGig={selectedJob} />
         </ModalContainer>

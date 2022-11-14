@@ -73,13 +73,11 @@ const Title = styled.div`
   padding: 8px;
   font-weight: bold;
   font-size: 18px;
-  border-top-left-radius: 6px;
 `;
 
 //  box-shadow: 1px 2px 10px var(--color-4);
 const ShadowBox = styled.div`
   margin: 20px auto;
-  border-radius: 5px;
   background-color: white;
   max-width: 1200px;
   border: 2px solid lightgrey;

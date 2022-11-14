@@ -12,6 +12,7 @@ function CompanyJobList({
 }) {
   return (
     <div>
+      <h3 style={{ color: '#483d8b' }}>Jobs</h3>
       <AddBtnContainer>
         <AddBtn role="button" onClick={onShowForm}>
           + Add Job

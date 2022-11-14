@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
 // @mui icons-material components
@@ -13,42 +13,12 @@ import Delete from '../components/svg/Delete';
 import Img from '../logo.png';
 
 import { useMediaQuery } from '../hooks/media';
-import { auth, db } from '../firebase';
-
-import {
-  addDoc,
-  collection,
-  onSnapshot,
-  query,
-  Timestamp,
-  where,
-  collectionGroup,
-  getDocs,
-} from 'firebase/firestore';
 
 function CompanyListHeading({ company, logo, jobs, deleteImage, setImg }) {
   const navigate = useNavigate();
   const isMobile = useMediaQuery('(max-width: 768px)');
-
-  // useEffect(() => {
-  //   console.log(company);
-  //   const docsSnap = getDocs(collection(db, 'applications'));
-  //   // const appRef = rootRef.collection('apps');
-  //   // const q = query(appRef, where('companyRef', '==', `${company.id}`));
-
-  //   // const unsub = onSnapshot(q, (querySnapshot) => {
-  //   //   // setHasApplied(!querySnapshot.empty);
-  //   //   console.log(querySnapshot);
-  //   // });
-  //   // // const querySnapshot = getDocs(apps);
-  //   // return () => unsub();
-  //   docsSnap.forEach((doc) => {
-  //     console.log(doc.data()); // "doc1", "doc2" and "doc3"
-  //   });
-  // }, []);
-
   return (
-    <ShadowBox>
+    <ShadowBox isMobile={isMobile}>
       <Header isMobile={isMobile}>
         <HeaderInfo>
           <Heading isMobile={isMobile}>
@@ -116,7 +86,7 @@ export default CompanyListHeading;
 // box-shadow: 1px 2px 10px var(--color-4);
 const ShadowBox = styled.div`
   margin: 10px auto;
-  padding: 10px 20px;
+  padding: ${({ isMobile }) => (isMobile ? `10px 0` : `10px 20px`)};
   border-radius: 5px;
   background-color: white;
   border: 2px solid lightgrey;

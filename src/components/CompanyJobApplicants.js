@@ -6,7 +6,6 @@ import CompanyJobItemHeader from './CompanyJobItemHeader';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import ApplicantHeader from './ApplicantHeader';
-import { style } from '@mui/system';
 import ProfileDisplay from './ProfileDisplay';
 
 function CompanyJobApplicants({ job, applicants, handleBack }) {
@@ -60,9 +59,16 @@ function CompanyJobApplicants({ job, applicants, handleBack }) {
           </div>
         </AppList>
         <AppProfileBody isMobile={isMobile} showProfile={showProfile}>
-          {/* <div onClick={() => setShowProfile(null)}>Close</div> */}
-          <div style={{ padding: 16 }}>
-            {showProfile && <ProfileDisplay userId={showProfile.uid} />}
+          <div isMobile={isMobile} style={{ padding: isMobile ? 0 : 4 }}>
+            {showProfile && (
+              <>
+                <ProfileDisplay
+                  userId={showProfile.uid}
+                  closeProfile={() => setShowProfile(null)}
+                  showClose={true}
+                />
+              </>
+            )}
           </div>
         </AppProfileBody>
       </AppBody>
@@ -78,8 +84,25 @@ const Container = styled.div`
   height: 100%;
 `;
 
+const CloseButton = styled.div`
+  margin: 12px;
+  color: blue;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:hover {
+    color: lightblue;
+  }
+`;
+
 const Body = styled.div`
   display: flex;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 `;
 
 const AppList = styled.div`
@@ -90,7 +113,7 @@ const AppList = styled.div`
 
 const AppProfileBody = styled.div`
   flex: 1;
-  padding: 16px;
+  padding: ${({ isMobile }) => (isMobile ? '0' : `16px;`)};
   overflow: auto;
   max-height: 100%;
   display: ${({ isMobile, showProfile }) => isMobile && !showProfile && `none`};
@@ -100,8 +123,7 @@ const AppProfileBody = styled.div`
 const AppBody = styled.div`
   border: 2px solid #5e76bf;
   display: flex;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+
   flex: 1;
   background: #fff;
   max-height: 80%;
@@ -113,12 +135,6 @@ const AppHeader = styled.div`
   font-weight: bold;
   padding: 8px;
   margin-bottom: 4px;
-`;
-
-const ListContainer = styled.div`
-  flex-basis: 350px;
-  border-right: 2px solid;
-  height: 450px;
 `;
 
 const BackButton = styled.span`

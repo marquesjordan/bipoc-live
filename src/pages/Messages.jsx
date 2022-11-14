@@ -18,6 +18,7 @@ import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 import User from '../components/User';
 import MessageForm from '../components/MessageForm';
 import Message from '../components/Message';
+import MessageUsers from '../components/MessageUsers';
 
 const Messages = () => {
   const [users, setUsers] = useState([]);
@@ -87,19 +88,25 @@ const Messages = () => {
       url = dlUrl;
     }
 
+    const currentTimestamp = Timestamp.fromDate(new Date());
+
     await addDoc(collection(db, 'messages', id, 'chat'), {
       text,
       from: user1,
       to: user2,
-      createdAt: Timestamp.fromDate(new Date()),
+      createdAt: currentTimestamp,
       media: url || '',
+    });
+
+    await updateDoc(doc(db, 'messages', id), {
+      lastMsgAt: currentTimestamp,
     });
 
     await setDoc(doc(db, 'lastMsg', id), {
       text,
       from: user1,
       to: user2,
-      createdAt: Timestamp.fromDate(new Date()),
+      createdAt: currentTimestamp,
       media: url || '',
       unread: true,
     });
@@ -109,7 +116,13 @@ const Messages = () => {
 
   return (
     <div className="home_container">
-      <div className="users_container">
+      <MessageUsers
+        user1={user1}
+        users={users}
+        selectUser={selectUser}
+        chat={chat}
+      />
+      {/* <div className="users_container">
         {users.map((user) => (
           <User
             key={user.uid}
@@ -119,7 +132,7 @@ const Messages = () => {
             chat={chat}
           />
         ))}
-      </div>
+      </div> */}
       <div className="messages_container">
         {chat ? (
           <>

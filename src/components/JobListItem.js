@@ -28,6 +28,7 @@ export default JobListItem;
 
 const Container = styled.div`
   border: 1px solid;
+  border-right: 0;
   padding: 5px;
   cursor: pointer;
   background-color: ${({ selectedGig, job }) => {
