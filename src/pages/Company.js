@@ -13,7 +13,6 @@ const Company = () => {
     const user = auth.currentUser.uid;
 
     const q = query(company, where('createdBy', '==', user));
-    console.log('q', q);
     const unsub = onSnapshot(q, (querySnapshot) => {
       let _companies = [];
       querySnapshot.forEach((doc) => {

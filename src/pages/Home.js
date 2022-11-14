@@ -4,14 +4,22 @@ import HomeGroups from '../components/HomeGroups';
 import styled from 'styled-components';
 import Container from '@mui/material/Container';
 import { useMediaQuery } from '../hooks/media';
+import Subscribe from '../components/Subscribe';
 
 function Home(props) {
   const isMobile = useMediaQuery('(max-width: 768px)');
 
   return (
     <div>
+      <FooterContainer>
+        <h3 style={{ textAlign: 'center' }}>
+          Our website is still under construction. Please leave your email below
+          for updates.
+        </h3>
+      </FooterContainer>
       <Hero />
-      <HomeGroups />
+      {/* <HomeGroups /> */}
+      <Subscribe />
       <AboutContainer>
         <Container
           style={{
@@ -35,14 +43,17 @@ function Home(props) {
             businesses that are looking to utilize your expertise, enabling to
             make a difference in the fields that matter to you.
           </p>
-          <img
-            style={{ maxWidth: '80%' }}
-            alt="about"
-            src="https://media.istockphoto.com/photos/london-uk-crowd-of-people-walking-at-work-in-early-morning-concept-picture-id1172671709?s=612x612"
-          />
+          <img style={{ width: '100%' }} alt="about" src="/love.jpg" />
         </Container>
       </AboutContainer>
       <FooterContainer />
+
+      {/* <FooterContainer>
+        <p style={{ textAlign: 'center' }}>
+          Our website is still under construction and we would like to stay in
+          contact to provide you updates on our journey.
+        </p>
+      </FooterContainer> */}
     </div>
   );
 }
@@ -57,7 +68,8 @@ const AboutContainer = styled.div`
 
 const FooterContainer = styled.div`
   display: flex;
-  padding: 25px 0 50px;
-  height: 200px;
-  background-color: #746ca466;
+  background-color: var(--color-7);
+  color: var(--color-2);
+  justify-content: center;
+  font-weight: bold;
 `;

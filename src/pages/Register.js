@@ -3,6 +3,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { setDoc, doc, Timestamp, collection } from 'firebase/firestore';
 import { auth, db } from '../firebase';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ const Register = () => {
     name: '',
     email: '',
     password: '',
+    type: 'company',
     error: null,
     loading: false,
   });
@@ -17,6 +19,8 @@ const Register = () => {
   const { name, email, password, error, loading } = data;
 
   const handleChange = (e) => {
+    console.log(e.target.name);
+    console.log(e.target.value);
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
@@ -39,6 +43,7 @@ const Register = () => {
         name,
         email,
         password,
+        type: data.type,
         createdAt: Timestamp.fromDate(new Date()),
         isOnline: true,
       });
@@ -48,6 +53,7 @@ const Register = () => {
       await setDoc(doc(profileRef, result.user.uid), {
         displayName: name,
         email: email,
+        type: data.type,
         title: '',
         pronoun: '',
         location: '',
@@ -59,6 +65,7 @@ const Register = () => {
         name: '',
         email: '',
         password: '',
+        type: 'company',
         error: null,
         loading: false,
       });
@@ -95,6 +102,30 @@ const Register = () => {
             onChange={handleChange}
           />
         </div>
+        <Radio>
+          <p>Account Type</p>
+          <div style={{ marginBottom: 5 }}>
+            <input
+              onChange={handleChange}
+              type="radio"
+              id="company"
+              name="type"
+              value="company"
+              defaultChecked={true}
+            />
+            <label htmlFor="company">I am a company</label>
+          </div>
+          <div>
+            <input
+              onChange={handleChange}
+              type="radio"
+              id="seeker"
+              name="type"
+              value="seeker"
+            />
+            <label htmlFor="seeker">I am a job seeker</label>
+          </div>
+        </Radio>
         {error ? <p className="error">{error}</p> : null}
         <div className="btn_container">
           <button className="btn" disabled={loading}>
@@ -107,3 +138,9 @@ const Register = () => {
 };
 
 export default Register;
+
+const Radio = styled.div`
+  label {
+    margin-left: 6px;
+  }
+`;

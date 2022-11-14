@@ -12,7 +12,7 @@ const ApplicantHeader = ({ user, onClick }) => {
 
   useEffect(() => {
     getDoc(doc(db, 'profiles', user.uid)).then((docSnap) => {
-      if (docSnap.exists) {
+      if (docSnap.exists()) {
         setProfileData(docSnap.data());
       }
     });

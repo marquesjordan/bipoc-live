@@ -59,7 +59,6 @@ function JobForm({ company, onCloseForm }) {
   };
 
   const handleDutyChange = (e) => {
-    console.log(e.target.value);
     setDutyItem(e.target.value);
   };
 

@@ -20,8 +20,10 @@ import BusinessIcon from '@mui/icons-material/Business';
 import PeoplesIcon from '@mui/icons-material/People';
 import Hamburger from './svg/Hamburger';
 import { Link } from 'react-router-dom';
+import { auth, db } from '../firebase';
 
 export default function MenuDrawer() {
+  console.log(auth.currentUser);
   const [state, setState] = React.useState({
     top: false,
     left: false,
@@ -44,18 +46,26 @@ export default function MenuDrawer() {
     return;
   };
 
-  const MenuItems = [
-    { text: 'Home', link: '/' },
-    { text: 'Profile', link: '/profile' },
-    { text: 'Company', link: '/company' },
-    { text: 'Messages', link: '/messages' },
-    { text: 'Jobs', link: '/jobs' },
-    { text: 'Applicants', link: '/applicants' },
-    { text: 'Settings', link: '/settings' },
-    { text: 'Connections', link: '/connections' },
-    { text: 'Notifications', link: '/notifications' },
-    { text: 'Favorites', link: '/favorites' },
-  ];
+  const MenuItems =
+    auth?.currentUser?.type !== 'seeker'
+      ? [
+          { text: 'Home', link: '/' },
+          { text: 'Profile', link: '/profile' },
+          { text: 'Company', link: '/company' },
+          { text: 'Messages', link: '/messages' },
+          { text: 'Jobs', link: '/jobs' },
+          // { text: 'Applicants', link: '/applicants' },
+          // { text: 'Settings', link: '/settings' },
+          // { text: 'Connections', link: '/connections' },
+          // { text: 'Notifications', link: '/notifications' },
+          // { text: 'Favorites', link: '/favorites' },
+        ]
+      : [
+          { text: 'Home', link: '/' },
+          { text: 'Profile', link: '/profile' },
+          { text: 'Messages', link: '/messages' },
+          { text: 'Jobs', link: '/jobs' },
+        ];
 
   const list = (anchor) => (
     <Box
@@ -81,10 +91,10 @@ export default function MenuDrawer() {
                       <MailIcon />,
                       <WorkIcon />,
                       <PeoplesIcon />,
-                      <SettingsIcon />,
-                      <PeopleIcon />,
-                      <NotificationsIcon />,
-                      <FavoritesIcon />,
+                      // <SettingsIcon />,
+                      // <PeopleIcon />,
+                      // <NotificationsIcon />,
+                      // <FavoritesIcon />,
                     ][index]
                   }
                 </ListItemIcon>

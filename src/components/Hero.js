@@ -18,17 +18,13 @@ function Hero(props) {
               join.
             </HeroText>
           </HeroTextContainer>
-          <BtnContainer>
+          {/* <BtnContainer>
             <Btn1>Post a job</Btn1>
             <Btn2>Find People</Btn2>
-          </BtnContainer>
+          </BtnContainer> */}
         </HeroLeftWrapper>
         <HeroRightWrapper>
-          <img
-            src="https://media.istockphoto.com/id/514325215/photo/say-cheese-for-success.webp?s=612x612&w=is&k=20&c=HTOLEzcFjszcseWaWCpxBr9s_hzvhmTn_Y8Wkca-S8g="
-            alt="bipoc"
-            style={{ width: '100%' }}
-          />
+          <img src={'/inclusion.jpg'} alt="bipoc" style={{ width: '100%' }} />
         </HeroRightWrapper>
       </Container>
     </HeroContainer>

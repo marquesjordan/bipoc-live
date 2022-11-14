@@ -28,6 +28,7 @@ import ProfileHeader from '../components/ProfileHeader';
 import WorkTable from '../components/WorkTable';
 import { auth, db, storage } from '../firebase';
 import { useMediaQuery } from '../hooks/media';
+import LikeHeart from './LikeHeart';
 
 const ProfileDisplay = ({ userId, editable, closeProfile, showClose }) => {
   const navigate = useNavigate();
@@ -183,7 +184,7 @@ const ProfileDisplay = ({ userId, editable, closeProfile, showClose }) => {
         )}
         {!editable && (
           <ActionIcons style={{ textAlign: 'right', margin: 12 }}>
-            <div
+            {/* <div
               style={{
                 color: 'grey',
                 display: 'flex',
@@ -193,7 +194,8 @@ const ProfileDisplay = ({ userId, editable, closeProfile, showClose }) => {
               }}>
               <FavoriteIcon color="disabled" />{' '}
               <span style={{ marginLeft: 5 }}>Like</span>
-            </div>
+            </div> */}
+            <LikeHeart userId={userId} />
             {' | '}
             <div
               onClick={() => setOpen(true)}

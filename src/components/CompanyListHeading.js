@@ -19,6 +19,7 @@ function CompanyListHeading({ company, logo, jobs, deleteImage, setImg }) {
   const isMobile = useMediaQuery('(max-width: 768px)');
   return (
     <ShadowBox isMobile={isMobile}>
+      <EditButton>Edit</EditButton>
       <Header isMobile={isMobile}>
         <HeaderInfo>
           <Heading isMobile={isMobile}>
@@ -49,7 +50,7 @@ function CompanyListHeading({ company, logo, jobs, deleteImage, setImg }) {
             <CompanyBio>{company.companyBio}</CompanyBio>
           </div>
         </HeaderInfo>
-        <HeaderData isMobile={isMobile}>
+        {/* <HeaderData isMobile={isMobile}>
           <div>
             <Data>
               <DataTitle>Company Views:</DataTitle>
@@ -75,7 +76,7 @@ function CompanyListHeading({ company, logo, jobs, deleteImage, setImg }) {
             <FacebookIcon />
             <YoutubeIcon />
           </Social>
-        </HeaderData>
+        </HeaderData> */}
       </Header>
     </ShadowBox>
   );
@@ -90,6 +91,16 @@ const ShadowBox = styled.div`
   border-radius: 5px;
   background-color: white;
   border: 2px solid lightgrey;
+  position: relative;
+`;
+
+const EditButton = styled.div`
+  margin: 20px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: blue;
+  cursor: pointer;
 `;
 
 const CompanyTitle = styled.h2`
